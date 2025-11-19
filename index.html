@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation System Architecture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        
+        .architecture {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .layer {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid #e0e0e0;
+            position: relative;
+        }
+        
+        .layer-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .layer-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .client { border-left: 5px solid #4CAF50; }
+        .client .layer-icon { background: #4CAF50; color: white; }
+        
+        .api { border-left: 5px solid #2196F3; }
+        .api .layer-icon { background: #2196F3; color: white; }
+        
+        .service { border-left: 5px solid #FF9800; }
+        .service .layer-icon { background: #FF9800; color: white; }
+        
+        .ml { border-left: 5px solid #9C27B0; }
+        .ml .layer-icon { background: #9C27B0; color: white; }
+        
+        .components {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .component {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .component:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+        
+        .component-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        
+        .component-desc {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        
+        .flow-arrow {
+            text-align: center;
+            color: #667eea;
+            font-size: 2em;
+            margin: -10px 0;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border-radius: 20px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+        
+        .data-flow {
+            background: #e3f2fd;
+            border: 2px dashed #2196F3;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .data-flow-title {
+            font-weight: bold;
+            color: #2196F3;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .flow-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .flow-step {
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .flow-step-number {
+            width: 30px;
+            height: 30px;
+            background: #2196F3;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: bold;
+        }
+        
+        .arrow-right {
+            font-size: 1.5em;
+            color: #2196F3;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .components {
+                grid-template-columns: 1fr;
+            }
+            
+            .arrow-right {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 Translation System Architecture</h1>
+        <p class="subtitle">Multi-layer FastAPI Translation Service</p>
+        
+        <!-- Client Layer -->
+        <div class="layer client">
+            <div class="layer-title">
+                <div class="layer-icon">👤</div>
+                1. Client Layer
+            </div>
+            <div class="components">
+                <div class="component">
+                    <div class="component-name">Web Browser</div>
+                    <div class="component-desc">Users access via browser, mobile app, or API clients</div>
+                </div>
+                <div class="component">
+                    <div class="component-name">HTTP Request</div>
+                    <div class="component-desc">POST /translate with texts and target language</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flow-arrow">↓</div>
+        
+        <!-- API Layer -->
+        <div class="layer api">
+            <div class="layer-title">
+                <div class="layer-icon">🔌</div>
+                2. API Layer (FastAPI Routes)
+            </div>
+            <div class="components">
+                <div class="component">
+                    <div class="component-name">Translation Routes</div>
+                    <div class="component-desc">Handle /translate endpoint, validate request data</div>
+                </div>
+                <div class="component">
+                    <div class="component-name">Health Routes</div>
+                    <div class="component-desc">Monitor system health and model status</div>
+                </div>
+                <div class="component">
+                    <div class="component-name">Validation</div>
+                    <div class="component-desc">Pydantic models validate input (max length, batch size)</div>
+                </div>
+                <div class="component">
+                    <div class="component-name">Error Handling</div>
+                    <div class="component-desc">Catch exceptions, return appropriate HTTP status codes</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flow-arrow">↓</div>
+        
+        <!-- Service Layer -->
+        <div class="layer service">
+            <div class="layer-title">
+                <div class="layer-icon">⚙️</div>
+                3. Service Layer (Business Logic)
+            </div>
+            <div class="components">
+                <div class="component">
+                    <div class="component-name">Translation Service</div>
+                    <div class="component-desc">Orchestrates translation workflow for batch processing</div>
+                </div>
+                <div class="component">
+                    <div class="component-name">Language Detection</div>
+                    <div class="component-desc">Detect source language using langdetect library</div>
+                </div>
+                <div class="component">
+                    <div class="component-name">Model Selection</div>
+                    <div class="component-desc">Choose correct model based on language pair (en-vi, vi-en, ja-en)</div>
+                </div>
+                <div class="component">
+                    <div class="component-name">Result Aggregation</div>
+                    <div class="component-desc">Collect results, count successes/errors, calculate timing</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flow-arrow">↓</div>
+        
+        <!-- ML Layer -->
+        <div class="layer ml">
+            <div class="layer-title">
+                <div class="layer-icon">🤖</div>
+                4. Machine Learning Layer
+            </div>
+            <div class="components">
+                <div class="component">
+                    <div class="component-name">Model Manager</div>
+                    <div class="component-desc">Load models at startup, manage lifecycle, cleanup on shutdown</div>
+                </div>
+                <div class="component">
+                    <div class="component-name">Tokenizer</div>
+                    <div class="component-desc">Convert text to tokens (MarianTokenizer)</div>
+                </div>
+                <div class="component">
+                    <div class="component-name">Neural Network</div>
+                    <div class="component-desc">MarianMT transformer model performs translation</div>
+                </div>
+                <div class="component">
+                    <div class="component-name">Device Management</div>
+                    <div class="component-desc">Use GPU (CUDA) if available, fallback to CPU</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Data Flow -->
+        <div class="data-flow">
+            <div class="data-flow-title">📊 Complete Request Flow</div>
+            <div class="flow-steps">
+                <div class="flow-step">
+                    <div class="flow-step-number">1</div>
+                    <strong>Request</strong><br>
+                    Client sends texts
+                </div>
+                <div class="arrow-right">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-number">2</div>
+                    <strong>Validate</strong><br>
+                    Check input format
+                </div>
+                <div class="arrow-right">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-number">3</div>
+                    <strong>Detect</strong><br>
+                    Find source language
+                </div>
+                <div class="arrow-right">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-number">4</div>
+                    <strong>Select</strong><br>
+                    Choose model
+                </div>
+                <div class="arrow-right">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-number">5</div>
+                    <strong>Translate</strong><br>
+                    Run ML model
+                </div>
+                <div class="arrow-right">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-number">6</div>
+                    <strong>Response</strong><br>
+                    Return translation
+                </div>
+            </div>
+        </div>
+        
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: #4CAF50;"></div>
+                <span>Client Layer - User Interface</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #2196F3;"></div>
+                <span>API Layer - HTTP Endpoints</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #FF9800;"></div>
+                <span>Service Layer - Business Logic</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #9C27B0;"></div>
+                <span>ML Layer - Neural Networks</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
