@@ -1,0 +1,28 @@
+@BaseUrl = http://localhost:8000
+GET {{BaseUrl}}/docs HTTP/1.1
+
+
+### Get with params
+
+GET {{BaseUrl}}/items/5?q=somequery HTTP/1.1
+
+### Get with params
+
+POST {{BaseUrl}}/items HTTP/1.1
+Accept: application/json
+
+{
+    "name": "Trung",
+    "age": 23
+}
+
+### Get with params
+
+GET {{BaseUrl}}/items/ HTTP/1.1
+User-Agent: "linux"
+Accept: application/json
+
+{
+    "name": "Trung",
+    "age": 23
+}

@@ -1,0 +1,16 @@
+services:
+  translation:
+    build:
+      context: .
+      dockerfile: dockerfile
+    networks:
+      - app-networks
+    ports:
+      - 8000:8000
+    volumes:
+      - ./models:/usr/src/app/models
+      - ./logs:/usr/src/app/logs
+
+networks:
+  app-networks:
+    driver: bridge

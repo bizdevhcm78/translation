@@ -1,0 +1,30 @@
+@BaseUrl = http://localhost:9000
+### translate
+
+POST {{BaseUrl}}/translate HTTP/1.1
+Accept: application/json
+
+{
+    "texts": [
+        "How are you?",
+        "This is a test sentence.",
+        "Opus-MT is fast!"
+    ],
+    "target_lang": "ja"
+    
+}
+
+### translate
+
+GET {{BaseUrl}}/health HTTP/1.1
+Accept: application/json
+
+{
+    "texts": [
+        "How are you?",
+        "This is a test sentence.",
+        "Opus-MT is fast!"
+    ],
+    "target_lang": "ja"
+    
+}
