@@ -19,5 +19,11 @@ compose-build:
 compose-up:
 	docker compose up -d
 
+compose-down:
+	docker compose down
+
 compose-log:
-	docker compose log
+	docker compose logs -f
+
+clean_all:
+	docker system prune -a --volumes
