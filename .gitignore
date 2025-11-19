@@ -7,3 +7,5 @@ logs/
 .env.local
 
 /rest_test
+
+/ml/models
