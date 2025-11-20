@@ -20,11 +20,11 @@ class Settings(BaseSettings):
 
     # Supported translations
     SUPPORTED_TRANSLATIONS: Dict[str, str] = {
-        "en-vi": "Helsinki-NLP/opus-mt-en-vi",
-        "vi-en": "Helsinki-NLP/opus-mt-vi-en",
+        # "en-vi": "Helsinki-NLP/opus-mt-en-vi",
+        # "vi-en": "Helsinki-NLP/opus-mt-vi-en",
         "ja-en": "Helsinki-NLP/opus-mt-ja-en",
         "en-ja": "Helsinki-NLP/opus-mt-en-jap",
-        "ja-vi": "Helsinki-NLP/opus-mt-ja-vi"
+        # "ja-vi": "Helsinki-NLP/opus-mt-ja-vi"
     }
     SUPPORTED_META: bool = False
     SUPPORTED_TRANSLATIONS_META: str = "facebook/nllb-200-distilled-600M"
