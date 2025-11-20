@@ -27,7 +27,20 @@ class ModelManagerMeta:
                 self.device = settings.DEVICE
             
             logger.info(f"Using device: {self.device}")
-            
+
+            # Use AutoTokenizer instead of NllbTokenizer model mit_sua
+            self.tokenizers_mit_sua = AutoTokenizer.from_pretrained(
+                settings.SUPPORTED_TRANSLATIONS_MIT_SUA,
+                use_fast=True
+            )
+            self.models_mit_sua = AutoModelForSeq2SeqLM.from_pretrained(
+                settings.SUPPORTED_TRANSLATIONS_MIT_SUA
+            )
+            self.models_mit_sua.to(self.device)
+
+            if settings.SUPPORTED_META is False and settings.SUPPORTED_META_1_3B is False:
+                logger.info("No Meta models to load as per configuration.")
+                return
             # Use AutoTokenizer instead of NllbTokenizer
             self.tokenizers = AutoTokenizer.from_pretrained(
                 settings.SUPPORTED_TRANSLATIONS_META,
@@ -46,16 +59,6 @@ class ModelManagerMeta:
                 settings.SUPPORTED_TRANSLATIONS_META_1_3B
             )
             self.models_1_3.to(self.device)
-
-            # Use AutoTokenizer instead of NllbTokenizer model mit_sua
-            self.tokenizers_mit_sua = AutoTokenizer.from_pretrained(
-                settings.SUPPORTED_TRANSLATIONS_MIT_SUA,
-                use_fast=True
-            )
-            self.models_mit_sua = AutoModelForSeq2SeqLM.from_pretrained(
-                settings.SUPPORTED_TRANSLATIONS_MIT_SUA
-            )
-            self.models_mit_sua.to(self.device)
             
             logger.info(f"Model loaded successfully")
             
