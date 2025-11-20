@@ -81,7 +81,8 @@ class TranslationService:
             translated_text = tokenizer.decode(
                 translated_tokens[0], skip_special_tokens=True
             )
-
+            if target_lang == "ja":
+                translated_text = postprocess_japanese(translated_text)
             end = datetime.now(timezone.utc)
             duration = (end - start).total_seconds()
 
@@ -98,3 +99,20 @@ class TranslationService:
             return TranslationResult(
                 detected_source_language="unknown", text=""
             )
+
+
+def preprocess_text(text: str) -> str:
+    """Clean text before translation"""
+    # Remove extra whitespace
+    text = " ".join(text.split())
+    # Ensure proper punctuation
+    text = text.strip()
+    return text
+
+def postprocess_japanese(text: str) -> str:
+    """Clean Japanese output"""
+    # Remove spaces between Japanese characters
+    import re
+    # Remove spaces between non-ASCII characters (Japanese)
+    text = re.sub(r'(?<=[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF])\s+(?=[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF])', '', text)
+    return text.strip()

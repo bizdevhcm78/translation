@@ -24,9 +24,11 @@ class Settings(BaseSettings):
         "vi-en": "Helsinki-NLP/opus-mt-vi-en",
         "ja-en": "Helsinki-NLP/opus-mt-ja-en",
         "en-ja": "Helsinki-NLP/opus-mt-en-jap",
-        "ja-vi": "Helsinki-NLP/opus-mt-ja-vi",
+        "ja-vi": "Helsinki-NLP/opus-mt-ja-vi"
     }
-
+    SUPPORTED_TRANSLATIONS_META: str = "facebook/nllb-200-distilled-600M"
+    SUPPORTED_TRANSLATIONS_META_1_3B: str = "facebook/nllb-200-distilled-1.3B"
+    SUPPORTED_TRANSLATIONS_MIT_SUA: str = "Mitsua/elan-mt-bt-en-ja"
     # CORS
     CORS_ORIGINS: list = ["*"]
 

@@ -1,9 +1,9 @@
 import os
 from transformers import MarianMTModel, MarianTokenizer
 
-model_name = "Helsinki-NLP/opus-mt-en-vi"
+model_name = "facebook/nllb-200-distilled-600M"
 local_model_dir = "ml/models"
-local_path = os.path.join(local_model_dir, "opus-mt-en-vi")
+local_path = os.path.join(local_model_dir, "nllb-200-distilled-600M")
 
 # Nếu chưa có thì tải từ Hugging Face
 if not os.path.exists(local_path):
