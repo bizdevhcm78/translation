@@ -1,7 +1,7 @@
 # ============================
 # Stage 1: Dependencies Builder
 # ============================
-FROM python:3.12-slim AS builder
+FROM pytorch/pytorch:2.9.0-cuda12.8-cudnn9-devel AS builder
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -16,14 +16,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies into /install
-COPY requirements.txt .
-RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+COPY requirements-cuda.txt .
+RUN pip install --no-cache-dir --prefix=/install -r requirements-cuda.txt
 
 
 # ============================
 # Stage 2: Runtime image
 # ============================
-FROM python:3.12-slim AS runtime
+FROM pytorch/pytorch:2.9.0-cuda12.8-cudnn9-runtime AS runtime
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1

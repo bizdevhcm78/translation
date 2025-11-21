@@ -30,7 +30,10 @@ class Settings(BaseSettings):
     SUPPORTED_TRANSLATIONS_META: str = "facebook/nllb-200-distilled-600M"
     SUPPORTED_META_1_3B: bool = False
     SUPPORTED_TRANSLATIONS_META_1_3B: str = "facebook/nllb-200-distilled-1.3B"
+    SUPPORTED_MIT_SUA: bool = False
     SUPPORTED_TRANSLATIONS_MIT_SUA: str = "Mitsua/elan-mt-bt-en-ja"
+    SUPPORTED_M2M100_1_2B: bool = False
+    SUPPORTED_TRANSLATIONS_M2M100_1_2B: str = "facebook/m2m100_1.2B"
     # CORS
     CORS_ORIGINS: list = ["*"]
 

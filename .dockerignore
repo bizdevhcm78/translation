@@ -1,0 +1,38 @@
+# Git repository
+.git
+.gitignore
+
+# Python cache
+__pycache__/
+**/__pycache__/
+
+# Logs
+logs/
+*.log
+
+# Environment variables (sensitive)
+.env
+.env.local
+
+# Docker
+.dockerignore
+Dockerfile
+
+# IDE / editor files
+.vscode/
+.idea/
+
+# Python build artifacts
+*.pyc
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+
+# ML models (nếu muốn không copy vào image)
+ml/models/
+
+# Test data / rest tests (nếu không cần trong image)
+rest_test/

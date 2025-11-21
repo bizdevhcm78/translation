@@ -6,7 +6,6 @@ import uvicorn
 from core.config import settings
 from core.logging import logger
 from ml.model_manager import model_manager
-from ml.model_manager_meta import model_manager_meta
 from api.controllers import translate_controller, health_controller
 
 
@@ -16,14 +15,12 @@ async def lifespan(app: FastAPI):
     # Startup
     logger.info(f"Starting {settings.APP_NAME} v{settings.APP_VERSION}")
     model_manager.load_models()
-    model_manager_meta.load_models()
 
     yield
 
     # Shutdown
     logger.info("Shutting down application...")
     model_manager.cleanup()
-    model_manager_meta.cleanup()
 
 # Create FastAPI app
 app = FastAPI(
